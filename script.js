@@ -5,6 +5,7 @@ const countdownOverlay = document.getElementById("countdown");
 const resultModal = document.getElementById("result");
 const modalBackground = document.getElementById("modal-background");
 
+
 // variables
 let userText = "";
 let errorCount = 0;
@@ -45,12 +46,17 @@ const typeController = (e) => {
     if (newLetterCorrect) {
         display.innerHTML += `<span class="green">${newLetter === " " ? "▪" : newLetter}</span>`;
     } else {
+        ++errorCount;
         display.innerHTML += `<span class="red">${newLetter === " " ? "▪" : newLetter}</span>`;
+        console.log(errorCount);
+
     }
+
 
     // check if given question text is equal to user typed text
     if (questionText === userText) {
-        gameOver();
+        console.log(errorCount);
+        gameOver(errorCount);
     }
 };
 
@@ -62,7 +68,7 @@ const validate = (key) => {
 };
 
 // FINISHED TYPING
-const gameOver = () => {
+const gameOver = (errorCount) => {
     document.removeEventListener("keydown", typeController);
     // the current time is the finish time
     // so total time taken is current time - start time
@@ -132,7 +138,7 @@ displayHistory();
 // Show typing time spent
 setInterval(() => {
     const currentTime = new Date().getTime();
-    const timeSpent = (currentTime - startTime) / 1000;
+    const timeSpent = Math.round((currentTime - startTime) / 1000);
 
 
     document.getElementById("show-time").innerHTML = `${startTime ? timeSpent : 0} seconds`;
